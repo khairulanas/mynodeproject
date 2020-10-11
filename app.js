@@ -3,7 +3,11 @@ const path = require('path');
 const express = require('express');
 //use hbs view engine
 const hbs = require('hbs');
+var bodyParser = require('body-parser');
 const app = express();
+
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 //set dynamic views file
 // app.set('views', path.join(__dirname, 'views'));
 // //set view engine
@@ -36,10 +40,15 @@ app.get('/', (req, res) => {
 //   //render file index.hbs
 //   res.render('index', { name: req.params.name });
 // });
-
 app.get('/post', (req, res) => {
-  //render file submit.hbs
   res.render('submit', {});
+})
+
+app.post('/post', (req, res) => {
+  var reqname = req.body.name ?? "no name";
+
+  res.render('index', { name: reqname });
+
 });
 
 app.listen(8000, () => { console.log('Server is running at port 8000'); });
